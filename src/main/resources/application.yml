@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: reactor-messaging-client
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+  kafka:
+    bootstrap-servers: localhost:29092
+  reactive:
+    rabbit:
+      bindings:
+        fromRouted:
+          group-name: ${spring.application.name}
+          exchange-name: executionRouted
+          routing-key: "*.ok"
+        fromAccounting:
+          group-name: ${spring.application.name}
+          exchange-name: executionAccounted
+          routing-key: "*.ok"
+          target-type: "org.example.reactormessagingclient.models.CustomDto"
+        fromError:
+          group-name: ${spring.application.name}
+          exchange-name: errorTest
+          routing-key: "*.ok"
+          auto-ack: false
+    kafka:
+      servers: ${spring.kafka.bootstrap-servers}
+      group-id: ${spring.application.name}
+      bindings:
+        fromEvents:
+          topic: eventsTopic
+        fromCustom:
+          topic: customTopic
+          target-type: "org.example.reactormessagingclient.models.CustomDto"

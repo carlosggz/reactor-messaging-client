@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MyService {
 
-    public void doSomething(String value) {
-        log.info("Received value: {}", value);
+    public void doSomething(String value, String routingKey) {
+        log.info("Received value: {}, with routing key: {}", value, routingKey);
     }
 }

@@ -46,11 +46,12 @@ class ReactorMessagingClientApplicationTests {
     void messageRoutedOkIsReceived() {
         //given
         val message = "test ok";
+        val key = "123.ok";
 
         //when
         eventPublisher
                 .sendMessage(RabbitMessage.builder()
-                        .routingKey("123.ok")
+                        .routingKey(key)
                         .exchangeName("executionRouted")
                         .payload(message)
                         .build())
@@ -60,7 +61,7 @@ class ReactorMessagingClientApplicationTests {
         Awaitility
                 .await()
                 .atMost(Duration.ofSeconds(2))
-                .untilAsserted(() -> verify(myService).doSomething(eq(message)));
+                .untilAsserted(() -> verify(myService).doSomething(eq(message), eq(key)));
     }
 
     @Test
@@ -92,11 +93,12 @@ class ReactorMessagingClientApplicationTests {
                 .id(123)
                 .name("some name")
                 .build();
+        val key = "123.ok";
 
         //when
         eventPublisher
                 .sendMessage(RabbitMessage.builder()
-                        .routingKey("123.ok")
+                        .routingKey(key)
                         .exchangeName("executionAccounted")
                         .payload(message)
                         .build())
@@ -106,18 +108,19 @@ class ReactorMessagingClientApplicationTests {
         Awaitility
                 .await()
                 .atMost(Duration.ofSeconds(2))
-                .untilAsserted(() -> verify(myService).doSomething(eq(message.toString())));
+                .untilAsserted(() -> verify(myService).doSomething(eq(message.toString()), eq(key)));
     }
 
     @Test
     void messageEventsIsReceived() {
         //given
         val message = "test ok";
+        val key = "123.ok";
 
         //when
         eventPublisher
                 .sendMessage(KafkaMessage.builder()
-                        .routingKey("123.ok")
+                        .routingKey(key)
                         .topic("eventsTopic")
                         .payload(message)
                         .build())
@@ -127,7 +130,7 @@ class ReactorMessagingClientApplicationTests {
         Awaitility
                 .await()
                 .atMost(Duration.ofSeconds(2))
-                .untilAsserted(() -> verify(myService).doSomething(eq(message)));
+                .untilAsserted(() -> verify(myService).doSomething(eq(message), eq(key)));
     }
 
     @Test
@@ -137,11 +140,12 @@ class ReactorMessagingClientApplicationTests {
                 .id(123)
                 .name("my-name")
                 .build();
+        val key = "123.ok";
 
         //when
         eventPublisher
                 .sendMessage(KafkaMessage.builder()
-                        .routingKey("123.ok")
+                        .routingKey(key)
                         .topic("customTopic")
                         .payload(message)
                         .build())
@@ -151,6 +155,6 @@ class ReactorMessagingClientApplicationTests {
         Awaitility
                 .await()
                 .atMost(Duration.ofSeconds(2))
-                .untilAsserted(() -> verify(myService).doSomething(eq(message.toString())));
+                .untilAsserted(() -> verify(myService).doSomething(eq(message.toString()), eq(key)));
     }
 }

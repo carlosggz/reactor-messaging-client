@@ -11,6 +11,10 @@ spring:
     bootstrap-servers: localhost:29092
   reactive:
     rabbit:
+      exchanges:
+        - name: executionRouted
+        - name: executionAccounted
+        - name: errorTest
       bindings:
         fromRouted:
           group-name: ${spring.application.name}
